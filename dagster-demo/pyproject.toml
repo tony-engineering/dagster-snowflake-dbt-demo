@@ -7,11 +7,12 @@ requires-python = ">=3.9,<3.14"
 dependencies = [
     "dagster",
     "dagster-cloud",
+    "dagster-webserver",
+    "dagster-dbt",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "dagster-webserver",
     "pytest",
 ]
 
@@ -24,4 +25,11 @@ module_name = "dagster_demo.definitions"
 code_location_name = "dagster_demo"
 
 [tool.setuptools.packages.find]
+where = ["src"]
 exclude=["dagster_demo_tests"]
+
+[tool.dg]
+directory_type = "project"
+
+[tool.dg.project]
+root_module = "dagster_demo"

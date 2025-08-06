@@ -13,6 +13,7 @@ venv/
 .dagster_home/
 dagster_home/
 tmpdir/
+.tmp_dagster_home*/
 
 # dbt
 dbt_packages/

@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+setup.cfg
+dagster_demo.egg-info/PKG-INFO
+dagster_demo.egg-info/SOURCES.txt
+dagster_demo.egg-info/dependency_links.txt
+dagster_demo.egg-info/requires.txt
+dagster_demo.egg-info/top_level.txt
+src/dagster_demo/__init__.py
+src/dagster_demo/definitions.py
+src/dagster_demo/defs/__init__.py
+src/dagster_demo/defs/resources.py
+src/dagster_demo/defs/assets/__init__.py
+src/dagster_demo/defs/assets/dbt.py
+tests/__init__.py
+tests/test_assets.py
