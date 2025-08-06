@@ -1,0 +1,68 @@
+{
+  "name": "Dagster Snowflake dbt Demo",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.flake8",
+        "ms-toolsai.jupyter",
+        "innoverio.vscode-dbt-power-user",
+        "bastienboutonnet.vscode-dbt",
+        "ms-vscode.vscode-json",
+        "ms-vscode.yaml",
+        "redhat.vscode-yaml",
+        "ms-vscode-remote.remote-containers",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "python.sortImports.provider": "isort",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true
+        },
+        "files.associations": {
+          "*.sql": "sql",
+          "*.yml": "yaml",
+          "*.yaml": "yaml"
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [
+    3000,
+    8080,
+    8501
+  ],
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "remoteUser": "vscode",
+
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/dagster-snowflake-dbt-demo",
+    "DBT_PROFILES_DIR": "/workspaces/dagster-snowflake-dbt-demo/.dbt"
+  },
+
+  "mounts": [
+    "source=dagster-home,target=/opt/dagster/dagster_home,type=volume"
+  ]
+}
