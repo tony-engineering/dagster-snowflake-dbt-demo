@@ -2,8 +2,10 @@
 
 -- French companies in data-related technology industries - partitioned by founded year
 -- This model will be materialized as a partitioned asset in Dagster
+-- Handles both single partition and multi-partition backfill scenarios
 
-{% set partition_year = var('partition_year', 2024) %}
+{% set partition_year = var('partition_year', none) %}
+{% set partition_years_list = var('partition_years_list', none) %}
 
 with french_data_companies as (
     select 
@@ -25,7 +27,13 @@ with french_data_companies as (
             'computer & network security'
         )
         and name is not null
-        and founded = {{ partition_year }}  -- Partition by founded year
+        {% if partition_years_list %}
+        and founded in {{ partition_years_list }}  -- Backfill multiple years
+        {% elif partition_year %}
+        and founded = {{ partition_year }}  -- Single partition
+        {% else %}
+        and founded = 2024  -- Default fallback
+        {% endif %}
 )
 
 select 
@@ -53,6 +61,10 @@ select
         when company_size in ('1001-5000', '5001-10000', '10000+') then 'Enterprise'
         else 'Unknown'
     end as size_category,
-    {{ partition_year }} as partition_year
+    {% if partition_years_list %}
+    founded_year as partition_year  -- Use actual founded year for backfills
+    {% else %}
+    {{ partition_year }} as partition_year  -- Use provided partition year for single runs
+    {% endif %}
 from french_data_companies
 order by company_name

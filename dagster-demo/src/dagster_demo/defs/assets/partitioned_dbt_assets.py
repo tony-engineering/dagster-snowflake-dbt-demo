@@ -13,16 +13,32 @@ from dagster_demo.defs.partitions import yearly_partition
 def partitioned_french_companies_dbt_assets(context: dg.AssetExecutionContext, dbt: DbtCliResource):
     """
     Partitioned dbt assets for French tech companies by founded year.
-    Each partition processes companies founded in a specific year.
+    Standard approach: each partition runs separately during backfills.
     """
-    # Extract the year from the partition key (e.g., "2020" -> "2020")
-    partition_year = context.partition_key
+    # Use partition_keys which works for both single and multi-partition scenarios
+    partition_keys = context.partition_keys
     
-    # Run dbt with the partition_year variable
-    yield from dbt.cli(
-        ["build", "--select", "stg_french_companies_by_year", "--vars", f"partition_year: {partition_year}"], 
-        context=context
-    ).stream()
+    if len(partition_keys) == 1:
+        # Single partition run
+        partition_year = partition_keys[0]
+        context.log.info(f"Processing single partition for year: {partition_year}")
+        
+        yield from dbt.cli(
+            ["build", "--select", "stg_french_companies_by_year", "--vars", f"partition_year: {partition_year}"], 
+            context=context
+        ).stream()
+    else:
+        # Multiple partitions in backfill - process all years in one dbt run
+        context.log.info(f"Processing backfill for {len(partition_keys)} partitions: {partition_keys}")
+        
+        # Create SQL IN clause format: (2020,2021,2022)
+        years_sql = "(" + ",".join(partition_keys) + ")"
+        context.log.info(f"Running dbt with years filter: founded IN {years_sql}")
+        
+        yield from dbt.cli(
+            ["build", "--select", "stg_french_companies_by_year", "--vars", f"partition_years_list: {years_sql}"], 
+            context=context
+        ).stream()
 
 
 # Summary dbt asset that depends on partitioned data
