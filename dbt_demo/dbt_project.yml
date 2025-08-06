@@ -4,6 +4,7 @@
 # name or the intended use of these models
 name: 'dbt_demo'
 version: '1.0.0'
+config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
 profile: 'dbt_demo'
@@ -31,6 +32,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_demo:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    # Staging models configuration
+    staging:
+      +materialized: table

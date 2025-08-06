@@ -1,15 +1,17 @@
-from pathlib import Path
-
 import dagster as dg
 from dagster_dbt import DbtCliResource
 
-# Path to your dbt project
-DBT_PROJECT_PATH = Path(__file__).parent.parent.parent.parent.parent / "dbt_demo"
+from dagster_demo.defs.project import dbt_project
+
+# Create dbt resource using the dbt_project
+dbt_resource = DbtCliResource(
+    project_dir=dbt_project,
+)
 
 @dg.definitions
 def resources():
-    return dg.Definitions(resources={"dbt": dbt_resource})
-
-dbt_resource = DbtCliResource(
-    project_dir=str(DBT_PROJECT_PATH)
-)
+    return dg.Definitions(
+        resources={
+            "dbt": dbt_resource,
+        },
+    )

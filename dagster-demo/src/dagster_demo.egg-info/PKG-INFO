@@ -8,6 +8,9 @@ Requires-Dist: dagster
 Requires-Dist: dagster-cloud
 Requires-Dist: dagster-webserver
 Requires-Dist: dagster-dbt
+Requires-Dist: dbt-core
+Requires-Dist: dbt-duckdb
+Requires-Dist: dbt-snowflake
 Provides-Extra: dev
 Requires-Dist: pytest; extra == "dev"
 

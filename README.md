@@ -32,7 +32,6 @@ dagster-snowflake-dbt-demo/
 ├── dbt_demo/              # Data transformation layer
 │   ├── models/            # SQL transformation models
 │   └── dbt_project.yml    # dbt configuration
-├── logs/                  # Application logs
 └── venv/                  # Python virtual environment
 ```
 
