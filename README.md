@@ -1,186 +1,72 @@
-# Dagster Snowflake dbt Demo
+# Dagster + Snowflake + dbt Demo
 
-A complete development environment for building data pipelines with Dagster, Snowflake, and dbt using GitHub Codespaces.
+A modern data stack demonstration showcasing orchestration, transformation, and cloud data warehousing integration.
 
-## 🚀 Quick Start with GitHub Codespaces
+## What This Project Does
 
-1. **Fork or clone this repository**
-2. **Open in Codespaces**: 
-   - Click the green "Code" button
-   - Select "Codespaces" tab
-   - Click "Create codespace on main"
-3. **Wait for setup**: The devcontainer will automatically install all dependencies
-4. **Configure your environment** (see Configuration section below)
+This project demonstrates a complete data pipeline using industry-standard tools:
 
-## 🏗️ What's Included
+- **🎯 Dagster**: Orchestrates data workflows and manages asset dependencies
+- **🔄 dbt**: Transforms raw data into analytics-ready models using SQL
+- **❄️ Snowflake**: Provides scalable cloud data warehouse for storage and compute
 
-### Tools & Frameworks
-- **Dagster**: Modern data orchestration platform
-- **dbt**: Transform data in your warehouse
-- **Snowflake**: Cloud data warehouse connector
-- **Python 3.11**: Latest Python with data science libraries
-- **Jupyter Lab**: Interactive development environment
-- **Streamlit**: Build data apps quickly
+## Architecture
 
-### VS Code Extensions
-- Python development tools (Black, isort, flake8)
-- dbt Power User for dbt development
-- GitHub Copilot for AI assistance
-- YAML and JSON support
-
-### Pre-configured Ports
-- `3000`: Dagster Web UI
-- `8080`: Alternative web services
-- `8501`: Streamlit applications
-
-## ⚙️ Configuration
-
-### 1. Environment Variables
-Create a `.env` file in the root directory:
-
-```bash
-# Snowflake Configuration
-SNOWFLAKE_USER=your_username
-SNOWFLAKE_PASSWORD=your_password
-SNOWFLAKE_ACCOUNT=your_account
-SNOWFLAKE_WAREHOUSE=your_warehouse
-SNOWFLAKE_DATABASE=your_database
-SNOWFLAKE_SCHEMA=your_schema
-SNOWFLAKE_ROLE=your_role
-
-# Optional: Additional configurations
-DAGSTER_HOME=/opt/dagster/dagster_home
-DBT_PROFILES_DIR=/workspaces/dagster-snowflake-dbt-demo/.dbt
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Dagster   │───▶│     dbt     │───▶│  Snowflake  │
+│ (Orchestration) │ │ (Transform) │    │ (Warehouse) │
+│             │    │             │    │             │
+│ - Asset mgmt│    │ - SQL models│    │ - Storage   │
+│ - Scheduling│    │ - Tests     │    │ - Compute   │
+│ - Monitoring│    │ - Docs      │    │ - Scaling   │
+└─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### 2. dbt Profile Configuration
-Create `.dbt/profiles.yml`:
-
-```yaml
-dagster_snowflake_dbt_demo:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: "{{ env_var('SNOWFLAKE_USER') }}"
-      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
-      database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
-      schema: "{{ env_var('SNOWFLAKE_SCHEMA') }}"
-      threads: 4
-      client_session_keep_alive: False
-```
-
-## 🛠️ Development Workflow
-
-### Start Dagster Development Server
-```bash
-dagster dev
-```
-Access the Dagster UI at `http://localhost:3000`
-
-### Work with dbt
-```bash
-# Initialize dbt project
-dbt init my_dbt_project
-
-# Install dbt packages
-dbt deps
-
-# Run dbt models
-dbt run
-
-# Test dbt models
-dbt test
-
-# Generate documentation
-dbt docs generate
-dbt docs serve
-```
-
-### Launch Jupyter Lab
-```bash
-jupyter lab
-```
-
-### Run Streamlit Apps
-```bash
-streamlit run app.py
-```
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 dagster-snowflake-dbt-demo/
-├── .devcontainer/
-│   ├── devcontainer.json      # Codespaces configuration
-│   └── setup.sh              # Environment setup script
-├── .dbt/                     # dbt profiles directory
-├── dagster_project/          # Dagster assets and resources
-├── dbt_project/             # dbt models and transformations
-├── data/                    # Sample data files
-├── tests/                   # Test files
-├── .env                     # Environment variables (create this)
-├── requirements.txt         # Python dependencies
-├── pyproject.toml          # Python project configuration
-└── README.md               # This file
+├── dagster-demo/          # Orchestration layer
+│   └── dagster_demo/      # Dagster assets and jobs
+├── dbt_demo/              # Data transformation layer
+│   ├── models/            # SQL transformation models
+│   └── dbt_project.yml    # dbt configuration
+├── logs/                  # Application logs
+└── venv/                  # Python virtual environment
 ```
 
-## 🔧 Customization
+## Key Features
 
-### Adding New Python Packages
-Add to `requirements.txt` and run:
-```bash
-pip install -r requirements.txt
-```
+- **Unified Orchestration**: Dagster manages the entire data pipeline lifecycle
+- **SQL-First Transformations**: dbt enables analytics engineers to build reliable data models
+- **Cloud-Native**: Leverages Snowflake's elastic compute and storage
+- **Data Quality**: Built-in testing and validation at every step
+- **Observability**: Comprehensive monitoring and lineage tracking
 
-### Modifying VS Code Settings
-Edit `.devcontainer/devcontainer.json` and rebuild the container.
+## Getting Started
 
-### Adding System Dependencies
-Modify `.devcontainer/setup.sh` and rebuild the container.
+1. **Setup Environment**: Activate the Python virtual environment
+2. **Configure Connections**: Ensure Snowflake credentials are properly configured
+3. **Run Pipeline**: Execute data workflows through Dagster UI or CLI
+4. **View Results**: Monitor pipeline execution and inspect transformed data
 
-## 🚨 Security Notes
+## Use Cases
 
-- Never commit `.env` files with real credentials
-- Use GitHub Secrets for production deployments
-- Rotate Snowflake credentials regularly
-- Consider using Snowflake key-pair authentication for production
+This pattern is ideal for:
+- **Analytics Engineering**: Building reliable data models for BI and reporting
+- **Data Pipeline Automation**: Scheduling and monitoring data workflows
+- **Data Quality Assurance**: Implementing tests and checks throughout the pipeline
+- **Team Collaboration**: Enabling data teams to work with familiar SQL-based tools
 
-## 🤝 Contributing
+## Technologies
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test in Codespaces
-5. Submit a pull request
-
-## 📚 Resources
-
-- [Dagster Documentation](https://docs.dagster.io/)
-- [dbt Documentation](https://docs.getdbt.com/)
-- [Snowflake Documentation](https://docs.snowflake.com/)
-- [GitHub Codespaces Documentation](https://docs.github.com/en/codespaces)
-
-## 🐛 Troubleshooting
-
-### Container won't start
-- Check `.devcontainer/devcontainer.json` syntax
-- Verify all file paths are correct
-- Look at the setup logs in Codespaces
-
-### Snowflake connection issues
-- Verify credentials in `.env` file
-- Check network connectivity
-- Ensure Snowflake account is accessible
-
-### dbt errors
-- Verify `profiles.yml` configuration
-- Check dbt version compatibility
-- Ensure Snowflake permissions are correct
+- **Python 3.13+**: Runtime environment
+- **Dagster**: Data orchestration platform
+- **dbt**: Data transformation framework
+- **Snowflake**: Cloud data platform
+- **SQL**: Primary transformation language
 
 ---
 
-Happy coding! 🎉
+*This demo showcases modern data engineering practices using open-source orchestration with enterprise-grade data infrastructure.*
