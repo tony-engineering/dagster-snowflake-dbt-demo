@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.venv/
+
+# Dagster
+.dagster/
+.dagster_home/
+dagster_home/
+tmpdir/
+
+# dbt
+dbt_packages/
+target/
+logs/
+
+# OS
+.DS_Store
