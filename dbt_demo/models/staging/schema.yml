@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging table for customer data"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for customer"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer full name"
+      - name: email
+        description: "Customer email address"
+      - name: created_date
+        description: "Date customer was created"
+      - name: customer_tier
+        description: "Customer tier (Premium, Standard, etc.)"
