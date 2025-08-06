@@ -1,8 +1,11 @@
 from pathlib import Path
 
-from dagster import definitions, load_from_defs_folder
+from dagster import Definitions
+from dagster_demo.defs.assets.dbt import dbt_demo_assets
+from dagster_demo.defs.resources import dbt_resource
 
 
-@definitions
-def defs():
-    return load_from_defs_folder(project_root=Path(__file__).parent.parent.parent)
+defs = Definitions(
+    assets=[dbt_demo_assets],
+    resources={"dbt": dbt_resource},
+)

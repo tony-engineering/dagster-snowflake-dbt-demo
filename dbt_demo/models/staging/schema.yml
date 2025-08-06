@@ -17,3 +17,34 @@ models:
         description: "Date customer was created"
       - name: customer_tier
         description: "Customer tier (Premium, Standard, etc.)"
+
+  - name: stg_french_data_companies
+    description: "Staging table for French companies in data-related technology industries"
+    columns:
+      - name: company_id
+        description: "Unique company identifier"
+        tests:
+          - unique
+          - not_null
+      - name: company_name
+        description: "Company name"
+        tests:
+          - not_null
+      - name: industry
+        description: "Company industry (computer software, IT services, network security)"
+      - name: locality
+        description: "Company city/locality in France"
+      - name: region
+        description: "French region where company is located"
+      - name: company_size
+        description: "Company size by employee count range"
+      - name: founded_year
+        description: "Year the company was founded"
+      - name: website
+        description: "Company website URL"
+      - name: linkedin_url
+        description: "Company LinkedIn profile URL"
+      - name: company_era
+        description: "Categorized era based on founding year (Startup Era, Dot-com Era, etc.)"
+      - name: size_category
+        description: "Simplified company size category (Micro, Small, Medium, Large, Enterprise)"

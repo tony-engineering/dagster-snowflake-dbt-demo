@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: my_company_data
+    description: "Company dataset from Snowflake MY_COMPANY_DATA database"
+    database: MY_COMPANY_DATA
+    schema: PUBLIC
+    tables:
+      - name: freecompanydataset
+        description: "Free company dataset containing company information worldwide"
+        columns:
+          - name: id
+            description: "Unique company identifier"
+          - name: name
+            description: "Company name"
+          - name: country
+            description: "Company country"
+          - name: industry
+            description: "Company industry category"
+          - name: locality
+            description: "Company city/locality"
+          - name: region
+            description: "Company region/state"
+          - name: size
+            description: "Company size by employee count"
+          - name: founded
+            description: "Year company was founded"
+          - name: website
+            description: "Company website URL"
+          - name: linkedin_url
+            description: "Company LinkedIn profile URL"
