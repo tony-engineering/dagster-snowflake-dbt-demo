@@ -1,0 +1,93 @@
+# Dagger ignore file - exclude unnecessary files for faster uploads
+
+# Virtual environments - these are the biggest culprits!
+venv/
+.venv/
+env/
+.env/
+dagster-demo/venv/
+*/venv/
+*/.venv/
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+*.orig
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.cache/
+.pytest_cache/
+.ruff_cache/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Large data files (if any)
+*.parquet
+*.csv
+data/
+datasets/
+
+# Documentation build
+docs/_build/
+site/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Node modules (if any)
+node_modules/
+
+# Docker
+.docker/
+
+# Other common excludes
+*.bak
+*.backup
+*.tmp
+coverage/
+htmlcov/
+.coverage
+.nyc_output
