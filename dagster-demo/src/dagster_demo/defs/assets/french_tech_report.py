@@ -75,8 +75,15 @@ def create_french_tech_report(
         
         # Fetch data and convert to DataFrame
         columns = [desc[0] for desc in cursor.description]
+        context.log.info(f"Query executed, columns: {columns}")
         data = cursor.fetchall()
+        context.log.info(f"Data fetched from Snowflake: {len(data)} rows")
+        if len(data) > 0:
+            context.log.info(f"Sample row: {data[0] if data else 'No data'}")
+        else:
+            context.log.warning("No data returned from Snowflake query")
         df_companies = pd.DataFrame(data, columns=columns)
+        context.log.info(f"DataFrame created with shape: {df_companies.shape}")
         
         context.log.info(f"Loaded {len(df_companies)} companies from Snowflake staging table")
         
@@ -126,22 +133,49 @@ def create_french_tech_report(
             showlegend=True
         )
         
+        # Debug data before visualization
+        context.log.info(f"DataFrame columns: {df_companies.columns.tolist()}")
+        context.log.info(f"DataFrame dtypes: {df_companies.dtypes.to_dict()}")
+        context.log.info(f"Sample data head:\n{df_companies.head().to_string()}")
+        
         # 1. Company Size Distribution (Pie Chart)
-        if 'size_category' in df_companies.columns and df_companies['size_category'].notna().any():
-            size_counts = df_companies['size_category'].value_counts()
-            fig.add_trace(
-                go.Pie(
-                    labels=size_counts.index,
-                    values=size_counts.values,
-                    hole=0.3,
-                    marker=dict(colors=px.colors.qualitative.Set3),
-                    textinfo="label+percent",
-                    textposition="auto",
-                    name="Company Size"
-                ),
-                row=1, col=1
-            )
+        context.log.info(f"Processing size_category chart...")
+        if 'SIZE_CATEGORY' in df_companies.columns:
+            size_category_non_null = df_companies['SIZE_CATEGORY'].notna().sum()
+            context.log.info(f"SIZE_CATEGORY column found, non-null values: {size_category_non_null}")
+            if df_companies['SIZE_CATEGORY'].notna().any():
+                size_counts = df_companies['SIZE_CATEGORY'].value_counts()
+                context.log.info(f"Size category distribution: {size_counts.to_dict()}")
+                fig.add_trace(
+                    go.Pie(
+                        labels=size_counts.index,
+                        values=size_counts.values,
+                        hole=0.3,
+                        marker=dict(colors=px.colors.qualitative.Set3),
+                        textinfo="label+percent",
+                        textposition="auto",
+                        name="Company Size"
+                    ),
+                    row=1, col=1
+                )
+                context.log.info("Size distribution pie chart added successfully")
+            else:
+                context.log.warning("SIZE_CATEGORY column exists but all values are null")
+                # For pie chart subplots, add an empty pie with a text element
+                fig.add_trace(
+                    go.Pie(
+                        labels=["No Data"],
+                        values=[1],
+                        textinfo="text",
+                        text=["Company size data<br>not available"],
+                        textfont=dict(size=14),
+                        marker=dict(colors=["lightgray"]),
+                        showlegend=False
+                    ),
+                    row=1, col=1
+                )
         else:
+            context.log.warning("SIZE_CATEGORY column not found in DataFrame")
             # For pie chart subplots, add an empty pie with a text element
             fig.add_trace(
                 go.Pie(
@@ -157,23 +191,33 @@ def create_french_tech_report(
             )
         
         # 2. Industry Breakdown (Horizontal Bar)
-        if 'industry' in df_companies.columns and df_companies['industry'].notna().any():
-            industry_counts = df_companies['industry'].value_counts()
-            fig.add_trace(
-                go.Bar(
-                    x=industry_counts.values,
-                    y=[industry.replace(' & ', ' &<br>').replace(' and ', ' and<br>') for industry in industry_counts.index],
-                    orientation='h',
-                    marker_color='rgba(55, 128, 191, 0.7)',
-                    name="Industries"
-                ),
-                row=1, col=2
-            )
-            fig.update_xaxes(title_text="Number of Companies", row=1, col=2)
+        context.log.info(f"Processing industry chart...")
+        if 'INDUSTRY' in df_companies.columns:
+            industry_non_null = df_companies['INDUSTRY'].notna().sum()
+            context.log.info(f"INDUSTRY column found, non-null values: {industry_non_null}")
+            if df_companies['INDUSTRY'].notna().any():
+                industry_counts = df_companies['INDUSTRY'].value_counts()
+                context.log.info(f"Top 5 industries: {industry_counts.head().to_dict()}")
+                fig.add_trace(
+                    go.Bar(
+                        x=industry_counts.values,
+                        y=[industry.replace(' & ', ' &<br>').replace(' and ', ' and<br>') for industry in industry_counts.index],
+                        orientation='h',
+                        marker_color='rgba(55, 128, 191, 0.7)',
+                        name="Industries"
+                    ),
+                    row=1, col=2
+                )
+                fig.update_xaxes(title_text="Number of Companies", row=1, col=2)
+                context.log.info("Industry bar chart added successfully")
+            else:
+                context.log.warning("INDUSTRY column exists but all values are null")
+        else:
+            context.log.warning("INDUSTRY column not found in DataFrame")
         
         # 3. Top 10 Regions (Bar Chart)
-        if 'region' in df_companies.columns and df_companies['region'].notna().any():
-            region_counts = df_companies['region'].value_counts().head(10)
+        if 'REGION' in df_companies.columns and df_companies['REGION'].notna().any():
+            region_counts = df_companies['REGION'].value_counts().head(10)
             fig.add_trace(
                 go.Bar(
                     x=region_counts.index,
@@ -187,8 +231,8 @@ def create_french_tech_report(
             fig.update_yaxes(title_text="Number of Companies", row=2, col=1)
         
         # 4. Top 10 Cities (Bar Chart)
-        if 'locality' in df_companies.columns and df_companies['locality'].notna().any():
-            city_counts = df_companies['locality'].value_counts().head(10)
+        if 'LOCALITY' in df_companies.columns and df_companies['LOCALITY'].notna().any():
+            city_counts = df_companies['LOCALITY'].value_counts().head(10)
             fig.add_trace(
                 go.Bar(
                     x=city_counts.index,
@@ -202,8 +246,8 @@ def create_french_tech_report(
             fig.update_yaxes(title_text="Number of Companies", row=2, col=2)
         
         # 5. Company Era Distribution (if available)
-        if 'company_era' in df_companies.columns and df_companies['company_era'].notna().any():
-            era_counts = df_companies['company_era'].value_counts()
+        if 'COMPANY_ERA' in df_companies.columns and df_companies['COMPANY_ERA'].notna().any():
+            era_counts = df_companies['COMPANY_ERA'].value_counts()
             fig.add_trace(
                 go.Bar(
                     x=era_counts.index,
@@ -234,8 +278,8 @@ def create_french_tech_report(
         
         # 6. Data Quality: Website & LinkedIn Coverage
         total_companies = len(df_companies)
-        website_count = df_companies['website'].notna().sum() if 'website' in df_companies.columns else 0
-        linkedin_count = df_companies['linkedin_url'].notna().sum() if 'linkedin_url' in df_companies.columns else 0
+        website_count = df_companies['WEBSITE'].notna().sum() if 'WEBSITE' in df_companies.columns else 0
+        linkedin_count = df_companies['LINKEDIN_URL'].notna().sum() if 'LINKEDIN_URL' in df_companies.columns else 0
         
         coverage_data = {
             'Metric': ['Companies with Website', 'Companies with LinkedIn', 'Companies without Website', 'Companies without LinkedIn'],
@@ -273,9 +317,9 @@ def create_french_tech_report(
         stats_text = f"""
         <b>Dataset Overview:</b><br>
         • Total Companies: {total_companies:,}<br>
-        • Unique Industries: {df_companies['industry'].nunique() if 'industry' in df_companies.columns else 'N/A'}<br>
-        • Unique Regions: {df_companies['region'].nunique() if 'region' in df_companies.columns else 'N/A'}<br>
-        • Unique Cities: {df_companies['locality'].nunique() if 'locality' in df_companies.columns else 'N/A'}<br>
+        • Unique Industries: {df_companies['INDUSTRY'].nunique() if 'INDUSTRY' in df_companies.columns else 'N/A'}<br>
+        • Unique Regions: {df_companies['REGION'].nunique() if 'REGION' in df_companies.columns else 'N/A'}<br>
+        • Unique Cities: {df_companies['LOCALITY'].nunique() if 'LOCALITY' in df_companies.columns else 'N/A'}<br>
         • Website Coverage: {(website_count/total_companies*100):.1f}%<br>
         • LinkedIn Coverage: {(linkedin_count/total_companies*100):.1f}%
         """
@@ -306,14 +350,14 @@ def create_french_tech_report(
         
         # Log some insights
         context.log.info(f"Report generated successfully with {total_companies} companies analyzed")
-        if 'industry' in df_companies.columns:
-            top_industry = df_companies['industry'].value_counts().index[0]
-            top_industry_count = df_companies['industry'].value_counts().iloc[0]
+        if 'INDUSTRY' in df_companies.columns:
+            top_industry = df_companies['INDUSTRY'].value_counts().index[0]
+            top_industry_count = df_companies['INDUSTRY'].value_counts().iloc[0]
             context.log.info(f"Top industry: {top_industry} with {top_industry_count} companies")
         
-        if 'region' in df_companies.columns:
-            top_region = df_companies['region'].value_counts().index[0]
-            top_region_count = df_companies['region'].value_counts().iloc[0]
+        if 'REGION' in df_companies.columns:
+            top_region = df_companies['REGION'].value_counts().index[0]
+            top_region_count = df_companies['REGION'].value_counts().iloc[0]
             context.log.info(f"Top region: {top_region} with {top_region_count} companies")
             
     except Exception as e:
