@@ -8,3 +8,12 @@ dbt_resource = DbtCliResource(
     project_dir=dbt_project,
     target="prod",  # Use Snowflake instead of DuckDB
 )
+
+
+@dg.definitions
+def resources():
+    return dg.Definitions(
+        resources={
+            "dbt": dbt_resource,
+        },
+    )

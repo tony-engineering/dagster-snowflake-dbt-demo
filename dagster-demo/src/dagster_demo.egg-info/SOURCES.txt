@@ -9,8 +9,12 @@ src/dagster_demo.egg-info/dependency_links.txt
 src/dagster_demo.egg-info/requires.txt
 src/dagster_demo.egg-info/top_level.txt
 src/dagster_demo/defs/__init__.py
+src/dagster_demo/defs/partitions.py
 src/dagster_demo/defs/project.py
 src/dagster_demo/defs/resources.py
 src/dagster_demo/defs/assets/__init__.py
+src/dagster_demo/defs/assets/constants.py
 src/dagster_demo/defs/assets/dbt.py
+src/dagster_demo/defs/assets/french_tech_report.py
+src/dagster_demo/defs/assets/partitioned_dbt_assets.py
 tests/test_assets.py
