@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Setting up simplified Dagster + dbt + Snowflake Demo environment..."
+echo "🚀 Setting up Dagster + dbt + Snowflake Demo environment..."
 
 # Navigate to workspace
 cd /workspaces/dagster-snowflake-dbt-demo
@@ -16,12 +16,24 @@ source venv/bin/activate
 echo "📦 Upgrading pip..."
 pip install --upgrade pip
 
-# Install basic Python dependencies
-echo "📋 Installing basic dependencies..."
-pip install dagster dbt-core dbt-snowflake
+# Install uv for faster package management
+echo "🚀 Installing uv for faster package management..."
+pip install uv
 
-echo "✅ Simple setup complete!"
+# Install dagster-demo package with all dependencies using uv
+echo "📋 Installing Dagster demo package with all dependencies..."
+cd dagster-demo
+uv pip install -e ".[dev]"
+cd ..
+
+# Install dbt dependencies
+echo "📋 Installing dbt dependencies..."
+uv pip install dbt-core dbt-snowflake
+
+echo "✅ Setup complete!"
+echo "🎉 Ready to run 'dagster dev' in the dagster-demo folder!"
+echo ""
 echo "Next steps:"
 echo "  1. source venv/bin/activate"
-echo "  2. Install additional packages as needed"
+echo "  2. cd dagster-demo && dagster dev"
 echo "  3. Configure your Snowflake credentials"

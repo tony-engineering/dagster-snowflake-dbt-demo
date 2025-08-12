@@ -29,7 +29,8 @@
     }
   },
 
-  "postCreateCommand": "echo 'Simple setup complete! Run setup manually if needed.'",
+  "onCreateCommand": "bash .devcontainer/setup-simple.sh",
+  "postCreateCommand": "echo '🎉 Codespace ready! Run cd dagster-demo && dagster dev to start the web UI.'",
 
   "forwardPorts": [3000, 8080],
   
