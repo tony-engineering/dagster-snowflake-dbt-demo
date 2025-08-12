@@ -104,7 +104,7 @@ class DagsterDemo:
         )
     
     @function
-    async def fix_linting(self, source: dagger.Directory, python_version: str = "3.13") -> dagger.Directory:
+    async def generate_linting(self, source: dagger.Directory, python_version: str = "3.13") -> dagger.Directory:
         """Auto-fix linting and formatting issues in the codebase"""
         return await (
             self.python_deps_layer(source, python_version)
@@ -121,7 +121,7 @@ class DagsterDemo:
         )
     
     @function
-    async def fix_linting_and_show_command(self, source: dagger.Directory, python_version: str = "3.13") -> str:
+    async def generate_linting_and_show_command(self, source: dagger.Directory, python_version: str = "3.13") -> str:
         """Fix linting issues and provide the command to apply changes back to your filesystem"""
         # First, run the fixes
         await self.fix_linting(source, python_version)
