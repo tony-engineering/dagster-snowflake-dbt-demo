@@ -1,0 +1,81 @@
+{
+  "name": "Dagster + dbt + Snowflake Demo",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.13-bullseye",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true
+    }
+  },
+
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/dagster-snowflake-dbt-demo/dagster-demo/src",
+    "DBT_PROJECT_DIR": "/workspaces/dagster-snowflake-dbt-demo/dbt_demo",
+    "VIRTUAL_ENV": "/workspaces/dagster-snowflake-dbt-demo/venv",
+    "PATH": "/workspaces/dagster-snowflake-dbt-demo/venv/bin:${PATH}"
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/dagster-snowflake-dbt-demo/venv/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": false,
+        "python.formatting.provider": "black",
+        "python.sortImports.args": [
+          "--profile",
+          "black"
+        ],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true
+        },
+        "files.associations": {
+          "*.sql": "sql",
+          "*.yml": "yaml",
+          "*.yaml": "yaml"
+        }
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "charliermarsh.ruff",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-sql",
+        "dbt-labs.vscode-dbt-power-user",
+        "dagster-io.dagster-vscode",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions"
+      ]
+    }
+  },
+
+  "onCreateCommand": "bash .devcontainer/setup.sh",
+  "postCreateCommand": "echo 'Codespace ready! Run ./scripts/run-step.sh help to see available commands.'",
+
+  "forwardPorts": [3000, 8080],
+  "portsAttributes": {
+    "3000": {
+      "label": "Dagster Web UI",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "dbt Docs",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "mounts": [
+    "source=dagster-demo-cache,target=/workspaces/dagster-snowflake-dbt-demo/.dagster,type=volume"
+  ],
+
+  "remoteUser": "vscode"
+}

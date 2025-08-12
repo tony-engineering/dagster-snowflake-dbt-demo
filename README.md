@@ -60,6 +60,16 @@ The CI pipeline uses an in-memory DuckDB database for dbt validation, requiring 
 
 ## Getting Started
 
+### GitHub Codespaces (Recommended)
+
+🚀 **One-click development environment**: Open in [GitHub Codespaces](https://github.com/codespaces) for zero-setup development.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tony-engineering/dagster-snowflake-dbt-demo)
+
+See [GH_CODESPACES.md](./GH_CODESPACES.md) for complete Codespaces documentation.
+
+### Local Development
+
 1. **Setup Environment**: Activate the Python virtual environment
 2. **Configure Connections**: Ensure Snowflake credentials are properly configured
 3. **Run Pipeline**: Execute data workflows through Dagster UI or CLI

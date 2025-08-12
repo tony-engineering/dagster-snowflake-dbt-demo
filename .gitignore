@@ -23,6 +23,14 @@ logs/
 # OS
 .DS_Store
 
+# Environment variables
+.env
+.env.local
+
+# Setup verification and activation scripts (created by Codespaces)
+verify_setup.py
+activate.sh
+
 reports/*
 data/*
 
