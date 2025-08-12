@@ -124,7 +124,7 @@ class DagsterDemo:
     async def generate_linting_and_show_command(self, source: dagger.Directory, python_version: str = "3.13") -> str:
         """Fix linting issues and provide the command to apply changes back to your filesystem"""
         # First, run the fixes
-        await self.fix_linting(source, python_version)
+        await self.generate_linting(source, python_version)
         
         # Return instructions for applying the fixes
         return '''
