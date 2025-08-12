@@ -9,6 +9,11 @@ dagster-demo/venv/
 */venv/
 */.venv/
 
+# dbt target directory with build artifacts
+dbt_demo/target/
+dbt_demo/dbt_packages/
+dbt_demo/logs/
+
 # Python cache and build artifacts
 __pycache__/
 *.py[cod]

@@ -128,15 +128,11 @@ class DagsterDemo:
         
         # Return instructions for applying the fixes
         return '''
-🔧 Linting fixes have been applied!
+🔧 Linting fixes have been created!
 
 To apply these fixes to your local files, run this command:
 
-  dagger call fix-linting --source=. export --path=fixed && \
-  cp -r fixed/dagster-demo/src/* dagster-demo/src/ && \
-  cp -r fixed/dagster-demo/tests/* dagster-demo/tests/ 2>/dev/null || true && \
-  rm -rf fixed && \
-  echo "✅ Files updated successfully!"
+cp -r fixed_code/dagster-demo/src/* dagster-demo/src/
         '''
 
     @function
