@@ -1,5 +1,7 @@
 # Dagster + Snowflake + dbt Demo
 
+[![Dagger CI](https://github.com/tony-engineering/dagster-snowflake-dbt-demo/actions/workflows/dagger-ci.yml/badge.svg)](https://github.com/tony-engineering/dagster-snowflake-dbt-demo/actions/workflows/dagger-ci.yml)
+
 A modern data stack demonstration showcasing orchestration, transformation, and cloud data warehousing integration.
 
 ## What This Project Does
@@ -42,6 +44,19 @@ dagster-snowflake-dbt-demo/
 - **Cloud-Native**: Leverages Snowflake's elastic compute and storage
 - **Data Quality**: Built-in testing and validation at every step
 - **Observability**: Comprehensive monitoring and lineage tracking
+- **Automated CI/CD**: Dagger-powered continuous integration with comprehensive testing
+
+## CI/CD Pipeline
+
+This project includes a robust CI/CD pipeline powered by Dagger that runs on every push and pull request:
+
+- **🔍 Code Linting**: Black, Ruff, and isort for code quality
+- **🧪 Testing**: Pytest for unit and integration tests
+- **✅ Dagster Validation**: Ensures all assets and definitions load correctly
+- **🔨 dbt Validation**: Validates SQL models and compilation
+- **🛡️ Security Scanning**: Safety and Bandit for dependency and code security
+
+The CI pipeline uses an in-memory DuckDB database for dbt validation, requiring no external dependencies.
 
 ## Getting Started
 
