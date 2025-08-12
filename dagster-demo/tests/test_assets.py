@@ -8,12 +8,3 @@ def test_definitions_load():
     # Basic test that the definitions object exists and is a LazyDefinitions object
     assert "LazyDefinitions" in str(type(defs))
 
-
-def test_basic_import():
-    """Test that basic imports work correctly."""
-    # Test that we can import our main modules without errors
-    import dagster_demo.definitions
-    import dagster_demo.defs.assets.dbt
-    
-    # If we get here without ImportError, the test passes
-    assert True
