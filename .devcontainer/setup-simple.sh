@@ -26,9 +26,19 @@ cd dagster-demo
 uv pip install -e ".[dev]"
 cd ..
 
+# Install additional dependencies required by dagster-demo
+echo "📋 Installing additional Python packages..."
+uv pip install pandas matplotlib seaborn plotly
+
 # Install dbt dependencies
 echo "📋 Installing dbt dependencies..."
 uv pip install dbt-core dbt-snowflake
+
+# Parse dbt project to generate manifest
+echo "📋 Parsing dbt project..."
+cd dbt_demo
+dbt parse
+cd ..
 
 echo "✅ Setup complete!"
 echo "🎉 Ready to run 'dagster dev' in the dagster-demo folder!"
