@@ -1,5 +1,7 @@
-import dagster as dg
 from datetime import datetime
+
+import dagster as dg
+
 from dagster_demo.defs.assets import constants
 
 start_date = constants.START_DATE
@@ -11,5 +13,5 @@ yearly_partition = dg.TimeWindowPartitionsDefinition(
     start=datetime(2000, 1, 1),
     end=datetime(2025, 1, 1),
     cron_schedule="0 0 1 1 *",  # January 1st each year at midnight
-    fmt="%Y"  # Format partition keys as years (e.g., "2020", "2021")
+    fmt="%Y",  # Format partition keys as years (e.g., "2020", "2021")
 )

@@ -102,6 +102,42 @@ class DagsterDemo:
             .with_exec(["isort", "--check-only", "src/", "tests/"])
             .stdout()
         )
+    
+    @function
+    async def fix_linting(self, source: dagger.Directory, python_version: str = "3.13") -> dagger.Directory:
+        """Auto-fix linting and formatting issues in the codebase"""
+        return await (
+            self.python_deps_layer(source, python_version)
+            .with_mounted_directory("/src", source)
+            .with_workdir("/src/dagster-demo")
+            .with_exec(["pip", "install", "-e", ".", "--no-deps"])
+            # Fix ruff issues
+            .with_exec(["ruff", "check", "--fix", "src/", "tests/"])
+            # Fix black formatting
+            .with_exec(["black", "src/", "tests/"])
+            # Fix isort import ordering
+            .with_exec(["isort", "src/", "tests/"])
+            .directory("/src")
+        )
+    
+    @function
+    async def fix_linting_and_show_command(self, source: dagger.Directory, python_version: str = "3.13") -> str:
+        """Fix linting issues and provide the command to apply changes back to your filesystem"""
+        # First, run the fixes
+        await self.fix_linting(source, python_version)
+        
+        # Return instructions for applying the fixes
+        return '''
+🔧 Linting fixes have been applied!
+
+To apply these fixes to your local files, run this command:
+
+  dagger call fix-linting --source=. export --path=fixed && \
+  cp -r fixed/dagster-demo/src/* dagster-demo/src/ && \
+  cp -r fixed/dagster-demo/tests/* dagster-demo/tests/ 2>/dev/null || true && \
+  rm -rf fixed && \
+  echo "✅ Files updated successfully!"
+        '''
 
     @function
     async def test_dagster(self, source: dagger.Directory, python_version: str = "3.13") -> str:
